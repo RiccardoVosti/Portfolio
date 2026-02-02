@@ -29,7 +29,7 @@ body {
 
 @font-face {
     font-family: Neue-Montreal;
-    src: url(/font/NeueMontreal-Medium.otf);
+    src: url(NeueMontreal-Medium.otf);
     font-size: medium;
 
 
@@ -61,7 +61,7 @@ nav {
 
 
 .logoimg {
-    background-image: url(/img/Smirkstudiologo.png);
+    background-image: url(Smirkstudiologo.png);
     background-repeat: no-repeat;
     background-size: contain;
     width: 80px;
@@ -69,7 +69,7 @@ nav {
 }
 
 .logoimg:hover {
-    background-image: url(/img/Smirkstudiologo2.png);
+    background-image: url(Smirkstudiologo2.png);
     background-color: black;
 }
 
