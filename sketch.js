@@ -1,9 +1,18 @@
+let container;
+
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  container = document.getElementById("javaani");
+
+  const canvas = createCanvas(container.clientWidth, innerHeight/100*86);
+  canvas.parent("javaani");
 }
 
-
-
 function draw() {
-  background(0);
+  background(20);
+  fill(255);
+  
+}
+
+function windowResized() {
+  resizeCanvas(container.clientWidth, innerHeight/100*86);
 }
