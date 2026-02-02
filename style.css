@@ -1,7 +1,7 @@
 body {
     font-family: Neue-Montreal;
     background-color: rgb(80, 255, 0);
-    
+
 }
 
 
@@ -80,7 +80,7 @@ nav {
 }
 
 nav {
-    padding-bottom:15px;
+    padding-bottom: 15px;
 
 }
 
@@ -92,6 +92,13 @@ a {
     color: black;
     font-weight: 400;
 
+    /* --- FIX PER IL JITTER --- */
+    display: inline-block;    /* Permette di gestire altezza e larghezza */
+    line-height: 1;           /* Forza l'altezza della riga a essere uguale al font-size */
+    height: 30px;             /* Imposta un'altezza fissa (leggermente superiore al font-size) */
+    vertical-align: middle;   /* Allinea il contenuto al centro */
+    overflow: hidden;         /* Impedisce a simboli giganti di uscire dal bordo */
+
 }
 
 a:hover {
@@ -102,8 +109,12 @@ a:hover {
 
 
 .navigazione {
-    width: 120px;
+    width: 200px;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    
+    gap: 5px;
+
+
 
 }
