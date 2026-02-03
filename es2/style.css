@@ -15,15 +15,31 @@ body {
 
 }
 
+#javaani {
+    width: 100%;
+    margin-top: 20px;
+    height: 80vh;
+    /* 80% dell'altezza dello schermo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+p {
+    margin: 0;
+}
+
+
 h1 {
     margin: 0;
-    margin-left: 10px;
+   
     width: 270px;
     font-family: Neue-Montreal;
     font-size: 24px;
     text-decoration: none;
     color: black;
-    font-weight: normal;
+    font-weight: 400;
 
 }
 
@@ -37,4 +53,94 @@ h1 {
 ::selection {
     color: rgb(0, 255, 0);
     background: rgb(0, 0, 0);
+}
+
+
+.navigazione {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+a {
+    cursor: crosshair;
+    margin: 0;
+    font-family: Neue-Montreal;
+    font-size: 24px;
+    text-decoration: none;
+    color: black;
+    font-weight: 400;
+
+    /* --- FIX PER IL JITTER --- */
+    display: inline-block;
+    /* Permette di gestire altezza e larghezza */
+    line-height: 1;
+    /* Forza l'altezza della riga a essere uguale al font-size */
+    height: 30px;
+    /* Imposta un'altezza fissa (leggermente superiore al font-size) */
+    vertical-align: middle;
+    /* Allinea il contenuto al centro */
+    overflow: hidden;
+    /* Impedisce a simboli giganti di uscire dal bordo */
+
+}
+
+a:hover {
+    background-color: black;
+    color: rgb(0, 255, 0);
+
+}
+
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.logo {
+    display: flex;
+    margin: 0;
+}
+
+
+.logotesto {
+    margin: 0;
+    margin-left: 10px;
+    width: 270px;
+    font-family: Neue-Montreal;
+    font-size: 24px;
+    text-decoration: none;
+    color: black;
+    font-weight: normal;
+
+}
+
+
+.logoimg {
+    background-image: url(/Portfolio/Smirkstudiologo.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 85px;
+
+}
+
+.logoimg:hover {
+    background-image: url(/Portfolio/Smirkstudiologo2.png);
+    background-color: black;
+}
+
+.logotesto:hover {
+    background-color: black;
+    color: rgb(0, 255, 0);
+
+}
+
+nav {
+    padding-bottom: 15px;
+
 }
