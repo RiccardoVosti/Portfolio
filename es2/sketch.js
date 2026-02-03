@@ -22,7 +22,7 @@ function draw() {
 
   background(10); // Sfondo molto scuro per far risaltare il verde
 
-  orbitControl();
+  //orbitControl();
 
   // --- SET LUCI ---
 
@@ -37,8 +37,10 @@ function draw() {
   // Sintassi: color(R, G, B), posizione(X, Y, Z)
   // X: -500 (sinistra), Y: -500 (alto), Z: -500 (dietro il modello)
   pointLight(0, 255, 0, -500, -500, -500);
-  // Ne aggiungiamo un'altra simmetrica per enfatizzare il contorno
+  // Enfatizzare il contorno
   pointLight(0, 255, 0, 500, 500, -500);
+
+
 
   push();
   // Orientamento e rotazione automatica
@@ -48,15 +50,16 @@ function draw() {
   scale(2.5);
   noStroke();
 
-  if (miaTexture) {
     texture(miaTexture);
     textureMode(NORMAL);
-  } else {
-    normalMaterial();
-  }
+  
+  
+  
 
   model(riccardo);
   pop();
+
+
 }
 
 
