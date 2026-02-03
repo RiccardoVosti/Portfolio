@@ -1,13 +1,13 @@
 let points = [];
 let container;
-const cellSize = 10;
-let scrollX = 0; // Variabile per lo scorrimento
+const cellSize =8;
+let scrollX = 0;
 
 function setup() {
   container = document.getElementById("javaani");
   let w = container ? container.clientWidth : 800;
   let h = container ? container.clientHeight : 400;
-  
+
   const c = createCanvas(w, h);
   c.parent("javaani");
 
@@ -21,18 +21,17 @@ function inizializzaTesto() {
   pg.background(0);
   pg.fill(255);
   pg.textAlign(CENTER, CENTER);
-  
+
   // Stretch verticale per occupare tutto il canvas
   pg.push();
-  pg.translate(width / 2, height / 2);
+  pg.translate(width / 2, height/1.7);
   let fontBaseSize = width / 7;
   pg.textSize(fontBaseSize);
-  // Rapporto di stretch basato sull'altezza del canvas
-  let stretchY = height / (fontBaseSize * 0.9);
+  let stretchY = height / (fontBaseSize * 0.8);
   pg.scale(1.0, stretchY);
   pg.text("SMIRKSTUDIO", 0, 0);
   pg.pop();
-  
+
   pg.loadPixels();
 
   for (let x = 0; x < width; x += cellSize) {
@@ -46,52 +45,66 @@ function inizializzaTesto() {
   pg.remove();
 }
 
-
-
-
-
 function draw() {
-  background(5, 10, 5); 
+  background(5, 10, 5);
 
-  // 1. Disegno della griglia
-  stroke(0, 40, 0); 
+  // 1. Disegno della griglia di sfondo
+  stroke(0, 40, 0);
   strokeWeight(1);
   for (let x = 0; x <= width; x += cellSize) line(x, 0, x, height);
   for (let y = 0; y <= height; y += cellSize) line(0, y, width, y);
 
-  // 2. Movimento "A BLOCCO" (Snap Movement)
-  // Cambia il valore '10' per regolare la velocità: 
-  // più alto è il numero, più lenta è l'animazione.
-  if (frameCount % 10 === 0) {
-    scrollX += cellSize; 
+  // 2. Movimento a scatti (Ticker speed)
+  if (frameCount % 4 === 0) {
+    scrollX += cellSize;
   }
 
-  // 3. Disegno dei pixel
+  // 3. Disegno dei pixel con interazione Noise
   noStroke();
   for (let i = 0; i < points.length; i++) {
     let p = points[i];
 
-    // Calcolo posizione con modulo per il loop
-    // Ora renderX sarà SEMPRE un multiplo di cellSize
+    // Posizione di base calcolata con lo scorrimento
     let renderX = (p.x + scrollX) % width;
     let renderY = p.y;
 
-    // Effetto LED Retro
-    fill(0, 255, 70, 50); // Glow
-    rect(renderX, renderY, cellSize, cellSize); 
+    // --- LOGICA INTERAZIONE MOUSE + NOISE ---
+    let d = dist(mouseX, mouseY, renderX, renderY);
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Se il mouse è vicino (raggio 150px), calcola la distorsione
+    if (d < 200) {
+      // Forza dell'effetto basata sulla vicinanza
+      let force = map(d, 0, 200, 20, 0);
+
+      // Usiamo il noise di p5 per un movimento organico ma "grigliato"
+      // L'uso di round() * cellSize costringe il pixel a restare nei binari della griglia
+      let nX = noise(p.x * 0.05, frameCount * 0.2);
+      let nY = noise(p.y * 0.05, frameCount * 0.1 + 100);
+
+      offsetX = round(map(nX, 0, 1, -force, force)) * cellSize;
+      offsetY = round(map(nY, 0, 1, -force, force)) * cellSize;
+    }
+
+    let finalX = renderX + offsetX;
+    let finalY = renderY + offsetY;
+
+    // Disegno del Pixel LED
+    // Glow esterno
+    fill(0, 255, 70, 50);
+    rect(finalX, finalY, cellSize, cellSize);
+
+    // Core del pixel
+    // Se il pixel è "disturbato" dal mouse, diventa leggermente più luminoso
+    if (d < 150) fill(0, 255, 0);
+    else fill(0, 255, 0);
     
-    fill(0, 255, 0); // Pixel pieno
-    rect(renderX + 1, renderY + 1, cellSize - 2, cellSize - 2);
+    rect(finalX + 1, finalY + 1, cellSize - 2, cellSize - 2);
   }
 }
 
-
-
-
-
-
-
-// --- LOGICA TESTO NAVIGAZIONE ---
+// --- LOGICA TESTO NAVIGAZIONE (Hacker Effect sui link) ---
 document.addEventListener("DOMContentLoaded", () => {
   const links = document.querySelectorAll("a,.logotesto");
   const GLYPHS = "X#%&@$01+-*/<>[]{}☺";
