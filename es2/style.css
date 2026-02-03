@@ -1,0 +1,40 @@
+body {
+    font-family: Neue-Montreal;
+    background-color: rgb(80, 255, 0);
+    cursor: crosshair;
+
+}
+
+
+
+@font-face {
+    font-family: Neue-Montreal;
+    src: url(NeueMontreal-Medium.otf);
+    font-size: medium;
+
+
+}
+
+h1 {
+    margin: 0;
+    margin-left: 10px;
+    width: 270px;
+    font-family: Neue-Montreal;
+    font-size: 24px;
+    text-decoration: none;
+    color: black;
+    font-weight: normal;
+
+}
+
+
+::-moz-selection {
+    /* Code for Firefox */
+    color: rgb(0, 255, 0);
+    background: rgb(0, 0, 0);
+}
+
+::selection {
+    color: rgb(0, 255, 0);
+    background: rgb(0, 0, 0);
+}
