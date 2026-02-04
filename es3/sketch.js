@@ -4,196 +4,250 @@ let engine, world;
 let bodies = [];
 let fallButton, resetButton;
 let dynamicTextSize;
-let mConstraint; // The magic link for grabbing
+let mConstraint;
+
+
+
+
+
 
 function preload() {
-  Engine = Matter.Engine;
-  Composite = Matter.Composite;
-  World = Matter.World;
-  Bodies = Matter.Bodies;
-  Body = Matter.Body;
-  Mouse = Matter.Mouse;
-  MouseConstraint = Matter.MouseConstraint;
-  Constraint = Matter.Constraint;
-  font = loadFont('NeueMontreal-Medium.otf');
+    Engine = Matter.Engine;
+    Composite = Matter.Composite;
+    World = Matter.World;
+    Bodies = Matter.Bodies;
+    Body = Matter.Body;
+    Mouse = Matter.Mouse;
+    MouseConstraint = Matter.MouseConstraint;
+    Constraint = Matter.Constraint;
+    font = loadFont('NeueMontreal-Medium.otf');
 }
+
+
+
+
+
 
 function setup() {
-  initSketch();
+    initSketch();
 }
+
+
+
+
+
 
 function initSketch() {
-  if (engine) {
-    World.clear(engine.world);
-    Engine.clear(engine);
-    bodies = [];
-  }
-
-  const container = document.getElementById("javaani");
-  const w = container ? container.clientWidth : windowWidth;
-  const h = container ? container.clientHeight : windowHeight;
-
-  const c = createCanvas(w, h, WEBGL);
-  if (container) c.parent("javaani");
-
-  engine = Engine.create();
-  world = engine.world;
-  world.gravity.y = 0;
-
-  // --- 85% Width Scaling ---
-  textFont(font);
-  let baseSize = 100;
-  textSize(baseSize);
-  let maxLineWidth = max(textWidth("Good design"), textWidth("Need structure"));
-  dynamicTextSize = baseSize * ((w * 0.85) / maxLineWidth);
-  textSize(dynamicTextSize);
-  textAlign(CENTER, CENTER);
-
-  // --- Mouse Setup for Grabbing ---
-  // We must map the p5 canvas to Matter.js mouse
-  const mouse = Mouse.create(c.elt);
-  
-  // Custom pixel ratio for high-density screens (Retina)
-  mouse.pixelRatio = pixelDensity();
-
-  mConstraint = MouseConstraint.create(engine, {
-    mouse: mouse,
-    constraint: {
-      stiffness: 0.1, // Lower = more "swing" and stretch
-      damping: 0.1,    // Adds a little organic weight
-      render: { visible: false }
+    if (engine) {
+        World.clear(engine.world);
+        Engine.clear(engine);
+        bodies = [];
     }
-  });
 
-  // This ensures the mouse works correctly in WEBGL (remapping center 0,0)
-  mConstraint.mouse.pixelRatio = pixelDensity();
+    const container = document.getElementById("javaani");
+    const w = container ? container.clientWidth : windowWidth;
+    const h = container ? container.clientHeight : windowHeight;
 
-  World.add(world, mConstraint);
+    const c = createCanvas(w, h, WEBGL);
+    if (container) c.parent("javaani");
 
-  // --- Buttons ---
-  if (!fallButton) {
-    fallButton = createButton('BREAK STRUCTURE');
-    fallButton.mousePressed(makeItFall);
-    styleButton(fallButton);
-  }
-  if (!resetButton) {
-    resetButton = createButton('RESET');
-    resetButton.mousePressed(initSketch);
-    styleButton(resetButton);
-  }
-
-  resetButton.hide();
-  fallButton.show();
-  centerButton(fallButton, w, 130);
-
-  createStaticPhrase("Good design", -dynamicTextSize * 0.5); 
-  createStaticPhrase("Need structure", dynamicTextSize * 0.5);
-
-  let thickness = 400;
-  let floor = Bodies.rectangle(0, h/2 + thickness/2, w * 5, thickness, { isStatic: true });
-  let leftWall = Bodies.rectangle(-w/2 - thickness/2, 0, thickness, h * 5, { isStatic: true });
-  let rightWall = Bodies.rectangle(w/2 + thickness/2, 0, thickness, h * 5, { isStatic: true });
-
-  World.add(world, [floor, leftWall, rightWall]);
-}
-
-function makeItFall() {
-  const container = document.getElementById("javaani");
-  const w = container ? container.clientWidth : windowWidth;
-
-  world.gravity.y = 1.8; 
-  fallButton.hide();
-  resetButton.show();
-  centerButton(resetButton, w, 130);
-  
-  for (let b of bodies) {
-    Body.setStatic(b.body, false);
-    // Initial break is now subtler
-    Body.setAngularVelocity(b.body, random(-0.05, 0.05)); 
-    Body.applyForce(b.body, b.body.position, {
-      x: random(-0.02, 0.02), 
-      y: 0
+    // --- MODIFIED ENGINE BOUNDARIES ---
+    // Increased iterations make the collision detection much "firmer"
+    engine = Engine.create({
+        positionIterations: 10,
+        velocityIterations: 10
     });
-  }
+    world = engine.world;
+    world.gravity.y = 0;
+
+    // ... (rest of your initSketch code remains exactly the same) ...
+    let marginX = 0;
+    let marginTop = 10;
+    textFont(font);
+    let baseSize = 100;
+    textSize(baseSize);
+    let maxLineWidth = max(textWidth("Good design"), textWidth("needs structure"));
+    dynamicTextSize = baseSize * ((w * 0.99) / maxLineWidth);
+    textSize(dynamicTextSize);
+
+    if (!fallButton) {
+        fallButton = createButton('Break structure');
+        fallButton.mousePressed(makeItFall);
+        styleButton(fallButton);
+    }
+    if (!resetButton) {
+        resetButton = createButton('Reset');
+        resetButton.mousePressed(initSketch);
+        styleButton(resetButton);
+    }
+
+    resetButton.hide();
+    fallButton.show();
+    fallButton.position(marginX + 10, marginTop + 120);
+    resetButton.position(marginX + 10, marginTop + 120);
+
+    const mouse = Mouse.create(c.elt);
+    mouse.pixelRatio = pixelDensity();
+    mConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.08,
+            damping: 0.1,
+            render: {
+                visible: false
+            }
+        }
+    });
+    World.add(world, mConstraint);
+
+    let startX = -w / 2 + marginX;
+    let textStartY = -h / 2 + 15 + 40 + (dynamicTextSize * 0.5);
+
+    createStaticPhrase("Good design", textStartY, startX);
+    createStaticPhrase("needs structure", textStartY + (dynamicTextSize * 0.9), startX);
+
+    let thickness = 400;
+    let floor = Bodies.rectangle(0, h / 2 + thickness / 2, w * 5, thickness, {
+        isStatic: true
+    });
+    let leftWall = Bodies.rectangle(-w / 2 - thickness / 2, 0, thickness, h * 5, {
+        isStatic: true
+    });
+    let rightWall = Bodies.rectangle(w / 2 + thickness / 2, 0, thickness, h * 5, {
+        isStatic: true
+    });
+
+    World.add(world, [floor, leftWall, rightWall]);
 }
+
+
+
+
+
 
 function draw() {
-  background(0);
+    background(0,255,0);
 
-  // Remap mouse for WEBGL coordinate system so the constraint knows where we are
-  // WEBGL (0,0) is center, Matter.js mouse (0,0) is top-left
-  let mX = mouseX - width / 2;
-  let mY = mouseY - height / 2;
-  
-  // Inject the remapped coordinates into the Matter mouse
-  mConstraint.mouse.position.x = mX;
-  mConstraint.mouse.position.y = mY;
+    // Adjust mouse for WEBGL center origin
+    let mX = mouseX - width / 2;
+    let mY = mouseY - height / 2;
+    mConstraint.mouse.position.x = mX;
+    mConstraint.mouse.position.y = mY;
 
-  Engine.update(engine);
+    Engine.update(engine);
 
-  for (let b of bodies) {
-    b.show();
-  }
-}
-
-// --- Helpers ---
-function centerButton(btn, canvasWidth, yPos) {
-  let btnWidth = btn.elt.offsetWidth;
-  btn.position(canvasWidth / 2 - btnWidth / 2, yPos);
-}
-
-function styleButton(btn) {
-  btn.style('background-color', '#00ff00');
-  btn.style('color', '#000000');
-  btn.style('font-family', 'Neue Montreal, sans-serif');
-  btn.style('font-size', '16px');
-  btn.style('padding', '12px 24px');
-  btn.style('border', 'none');
-  btn.style('border-radius', '50px');
-  btn.style('cursor', 'pointer');
-}
-
-function createStaticPhrase(phrase, yOffset) {
-  let currentX = -textWidth(phrase) / 2;
-  for (let i = 0; i < phrase.length; i++) {
-    let char = phrase[i];
-    let charW = textWidth(char);
-    if (char !== " ") {
-      let xPos = currentX + charW / 2;
-      let newLetter = new Letter(world, xPos, yOffset, char, dynamicTextSize);
-      bodies.push(newLetter);
+    // Cursor logic
+    let isOverAny = false;
+    if (mConstraint.body) {
+        cursor('grabbing');
+    } else {
+        for (let b of bodies) {
+            if (Matter.Bounds.contains(b.body.bounds, {
+                    x: mX,
+                    y: mY
+                })) {
+                isOverAny = true;
+                break;
+            }
+        }
+        isOverAny ? cursor('grab') : cursor(ARROW);
     }
-    currentX += charW; 
-  }
+
+    for (let b of bodies) {
+        b.show();
+    }
 }
+
+
+
+
+
+
+function createStaticPhrase(phrase, yPos, startX) {
+    let currentX = startX;
+    textSize(dynamicTextSize); // Ensure correct size for textWidth
+    for (let i = 0; i < phrase.length; i++) {
+        let char = phrase[i];
+        let charW = textWidth(char);
+        if (char !== " ") {
+            // Calculate center of the character
+            let xPos = currentX + charW / 2;
+            let newLetter = new Letter(world, xPos, yPos, char, dynamicTextSize);
+            bodies.push(newLetter);
+        }
+        currentX += charW;
+    }
+}
+
+
+
+
 
 class Letter {
-  constructor(world, x, y, char, size) {
-    this.char = char;
-    let boxW = textWidth(char) * 0.9; 
-    let boxH = size * 0.75; 
-    this.body = Bodies.rectangle(x, y, boxW, boxH, {
-      restitution: 0.4,
-      friction: 0.3,
-      isStatic: true 
-    });
-    World.add(world, this.body);
-  }
-  show() {
+    constructor(world, x, y, char, size) {
+        this.char = char;
+        textSize(size);
+
+        // --- MODIFIED HITBOX BOUNDARIES ---
+        // boxW is slightly reduced to prevent the "snagging" that causes overlaps
+        let boxW = textWidth(char) * 0.85;
+        let boxH = size * 0.85;
+
+        this.body = Bodies.rectangle(x, y, boxW, boxH, {
+            restitution: 0.2, // Lower bounce prevents letters from clipping through on impact
+            friction: 0.2,
+            slop: 0.05, // Small buffer to allow engine to resolve overlaps better
+            isStatic: true
+        });
+        World.add(world, this.body);
+    }
+
+    show() {
     let pos = this.body.position;
     let angle = this.body.angle;
     push();
     translate(pos.x, pos.y);
     rotateZ(angle);
-    fill(0, 255, 0); 
+    fill(0); 
     noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(dynamicTextSize);
     text(this.char, 0, 0); 
     pop();
   }
 }
 
-function windowResized() {
-  initSketch();
+
+
+
+
+function makeItFall() {
+    world.gravity.y = 1.8;
+    fallButton.hide();
+    resetButton.show();
+    for (let b of bodies) {
+        Body.setStatic(b.body, false);
+        Body.applyForce(b.body, b.body.position, {
+            x: random(-0.02, 0.02),
+            y: -0.05
+        });
+        Body.setAngularVelocity(b.body, random(-0.1, 0.1));
+    }
+}
+
+
+
+
+
+function styleButton(btn) {
+    btn.style('background-color', '#000000');
+    btn.style('color', '#00ff00');
+    btn.style('font-family', 'Neue-Montreal, sans-serif');
+    btn.style('font-size', '24px');
+    btn.style('padding', '5px 12px');
+    btn.style('border', 'none');
+    btn.style('border-radius', '50px');
+    btn.style('cursor', 'pointer');
 }
 
 
@@ -202,33 +256,41 @@ function windowResized() {
 
 
 
+function windowResized() {
+    initSketch();
+}
 
 
 
 // --- LOGICA TESTO NAVIGAZIONE (Hacker Effect sui link) ---
 document.addEventListener("DOMContentLoaded", () => {
-    const links = document.querySelectorAll("a,.logotesto");
-    const GLYPHS = "X#%&@$01+-*/<>[]{}☺";
+  const links = document.querySelectorAll("a,.logotesto");
+  const GLYPHS = "X#%&@$01+-*/<>[]{}☺";
 
-    links.forEach((link) => {
-        const originalText = link.innerText;
-        let interval = null;
-        link.addEventListener("mouseenter", () => {
-            let iteration = 0;
-            clearInterval(interval);
-            interval = setInterval(() => {
-                link.innerText = originalText.split("").map((l, i) => {
-                    if (i < iteration) return originalText[i];
-                    if (l === " ") return " ";
-                    return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-                }).join("");
-                if (iteration >= originalText.length) clearInterval(interval);
-                iteration += 1;
-            }, 40);
-        });
-        link.addEventListener("mouseleave", () => {
-            clearInterval(interval);
-            link.innerText = originalText;
-        });
+  links.forEach((link) => {
+    const originalText = link.innerText;
+    let interval = null;
+    link.addEventListener("mouseenter", () => {
+      let iteration = 0;
+      clearInterval(interval);
+      interval = setInterval(() => {
+        link.innerText = originalText.split("").map((l, i) => {
+          if (i < iteration) return originalText[i];
+          if (l === " ") return " ";
+          return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        }).join("");
+        if (iteration >= originalText.length) clearInterval(interval);
+        iteration += 1;
+      }, 40);
     });
+    link.addEventListener("mouseleave", () => {
+      clearInterval(interval);
+      link.innerText = originalText;
+    });
+  });
 });
+
+
+
+
+

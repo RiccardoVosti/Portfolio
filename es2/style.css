@@ -1,6 +1,6 @@
 body {
     font-family: Neue-Montreal;
-    background-color: rgb(80, 255, 0);
+    background-color: rgb(0, 255, 0);
     cursor: crosshair;
 
 }
@@ -17,18 +17,33 @@ body {
 
 
 .info {
-    margin-left: 3px;
+    margin-left: 0px;
+    padding-bottom: 10px;
 
 }
 
+
+
 #javaani {
+    display: block;
     width: 100%;
-    margin-top: 20px;
     height: 80vh;
-    /* 80% dell'altezza dello schermo */
+    /* Or a specific height like 500px */
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    /* Prevents scrollbars from canvas rounding errors */
+    position: relative;
     display: flex;
+    /* Helps center the loader */
     justify-content: center;
     align-items: center;
+}
+
+
+canvas {
+    display: block;
+    /* Removes the tiny bottom gap */
 
 }
 
@@ -39,7 +54,7 @@ p {
 
 h1 {
     margin: 0;
-   
+
     width: 270px;
     font-family: Neue-Montreal;
     font-size: 24px;
@@ -63,7 +78,7 @@ h1 {
 
 
 .navigazione {
-    width: 150px;
+    width: 240px;
     display: flex;
     flex-direction: column;
 
@@ -155,3 +170,173 @@ nav {
 
 
 
+/* MASTER CENTERER */
+.loader-centerer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    z-index: 1000;
+}
+
+.triangle-loader {
+    width: 40px;
+    /* Height of equilateral triangle = width * 0.866 */
+    height: 34.6px;
+    position: relative;
+    animation: spin 1.2s linear infinite;
+
+    /* FIX 1: The Anchor Point */
+    /* 50% horizontal, 66.6% vertical is the true centroid */
+    transform-origin: 50% 66.6%;
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #00ff00;
+    border-radius: 50%;
+}
+
+/* Triangle Layout */
+.dot:nth-child(1) {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dot:nth-child(2) {
+    bottom: 0;
+    left: 0;
+}
+
+.dot:nth-child(3) {
+    bottom: 0;
+    right: 0;
+}
+
+/* FIX 2: The Pulse Logic */
+.loading-text {
+    font-family: "Neue Montreal", sans-serif;
+    color: #00ff00;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.dot-anim {
+    display: inline-block;
+    animation: dotPulse 1.4s infinite ease-in-out;
+}
+
+.dot-anim:nth-child(1) {
+    animation-delay: 0.0s;
+}
+
+.dot-anim:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot-anim:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* ANIMATION KEYFRAMES */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+
+
+
+
+
+
+
+/*RESPONSIVE */
+@media screen and (max-width: 768px) {
+   
+
+    .navigazione {
+        width: 100px;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+
+    .logotesto {
+    margin: 0;
+    margin-left: 10px;
+    width: 140px;
+    font-family: Neue-Montreal;
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    font-weight: normal;
+
+}
+
+
+.logoimg {
+    background-image: url(Smirkstudiologo.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 50px;
+    height:60px;
+
+}
+
+
+
+a {
+    cursor: crosshair;
+    margin: 0;
+    font-family: Neue-Montreal;
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    font-weight: 400;
+
+    /* --- FIX PER IL JITTER --- */
+    display: inline-block;
+    /* Permette di gestire altezza e larghezza */
+    line-height: 1;
+    /* Forza l'altezza della riga a essere uguale al font-size */
+    height: 22px;
+    /* Imposta un'altezza fissa (leggermente superiore al font-size) */
+    vertical-align: middle;
+    /* Allinea il contenuto al centro */
+    overflow: hidden;
+    /* Impedisce a simboli giganti di uscire dal bordo */
+
+}
+
+
+}
