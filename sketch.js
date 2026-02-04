@@ -74,7 +74,7 @@ function draw() {
     let offsetY = 0;
 
     // Se il mouse è vicino (raggio 150px), calcola la distorsione
-    if (d < 200) {
+    if (d < 100) {
       // Forza dell'effetto basata sulla vicinanza
       let force = map(d, 0, 200, 20, 0);
 
