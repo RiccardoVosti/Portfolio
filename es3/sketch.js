@@ -108,7 +108,7 @@ function initSketch() {
     // 2. NEW CALCULATION FOR TEXT POSITION
     // Convert screen Y to WEBGL Y (subtract h/2) and add the 50px offset
     let startX = -w / 2 + marginX + 10;
-    let relativeGap = dynamicTextSize/2.7;
+    let relativeGap = dynamicTextSize / 2.7;
     let textStartY = (buttonY + buttonHeight + relativeGap) - (h / 2);
 
     // Create Phrases
@@ -117,8 +117,13 @@ function initSketch() {
 
     // Boundaries
     let thickness = 400;
-    let floor = Bodies.rectangle(0, h / 2 + thickness / 2, w * 5, thickness, {
-        isStatic: true
+    let offset = -(dynamicTextSize * 0.1); // The extra 10px you requested
+
+   
+    let floor = Bodies.rectangle(0, (h / 2) + (thickness / 2) + offset, w * 5, thickness, {
+        isStatic: true,
+        friction: 0.6,
+        restitution: 0.1 // Low restitution keeps them from bouncing "through" the floor
     });
     let leftWall = Bodies.rectangle(-w / 2 - thickness / 2, 0, thickness, h * 5, {
         isStatic: true
@@ -186,6 +191,7 @@ function createStaticPhrase(phrase, yPos, startX) {
         }
         currentX += charW;
     }
+    
 }
 
 
@@ -197,15 +203,17 @@ class Letter {
         this.char = char;
         textSize(size);
 
-        // --- MODIFIED HITBOX BOUNDARIES ---
-        // boxW is slightly reduced to prevent the "snagging" that causes overlaps
-        let boxW = textWidth(char) * 0.85;
-        let boxH = size * 0.85;
+        let boxW = textWidth(char) * 0.9;
+        let boxH = size * 0.8;
 
         this.body = Bodies.rectangle(x, y, boxW, boxH, {
-            restitution: 0.2, // Lower bounce prevents letters from clipping through on impact
-            friction: 0.2,
-            slop: 0.05, // Small buffer to allow engine to resolve overlaps better
+            restitution: 0.2,
+            friction: 0.1,
+            // Chamfer rounds the corners of the physics box
+            // This prevents sharp corners from "hooking" into the floor
+            chamfer: {
+                radius: 10
+            },
             isStatic: true
         });
         World.add(world, this.body);
