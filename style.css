@@ -1,16 +1,28 @@
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 5px; /* The 5px green border */
+    box-sizing: border-box;
     font-family: Neue-Montreal;
     background-color: rgb(0, 255, 0);
-    cursor: crosshair;
+    
+    
+    /* Layout logic: stack elements vertically */
+    display: flex;
+    flex-direction: column;
 }
 
-
 #javaani {
-
     width: 100%;
-    height: 800px;
+    flex: 1; /* Stretches to fill vertical space */
     background-color: black;
     overflow: hidden;
+    display: block; /* Ensures it has dimensions immediately */
+    line-height: 0;
+}
+
+canvas {
+    display: block !important;
 }
 
 
@@ -69,6 +81,14 @@ nav {
 
 }
 
+
+hr {
+  width: 100%;
+  z-index: 10;
+  border: 1px solid black; /* Ensure it has a color */
+  margin-bottom: 10px;        /* Give it some breathing room */
+}
+
 .logoimg:hover {
     background-image: url(Smirkstudiologo2.png);
     background-color: black;
@@ -86,7 +106,8 @@ nav {
 }
 
 a {
-    cursor: crosshair;
+    
+
     margin: 0;
     font-family: Neue-Montreal;
     font-size: 24px;
@@ -162,7 +183,7 @@ a:hover {
 
 
 a {
-    cursor: crosshair;
+    
     margin: 0;
     font-family: Neue-Montreal;
     font-size: 16px;

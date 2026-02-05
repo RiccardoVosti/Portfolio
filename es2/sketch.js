@@ -2,48 +2,31 @@ let riccardo;
 let miaTexture;
 let modelReady = false;
 
-
-
-
-
-
-
 function setup() {
+  frameRate(60);
   const container = document.getElementById("javaani");
   
-  // 1. Create the master unit (Static, handles centering)
+  // Create Loader (same as your previous logic)
   const centerer = document.createElement('div');
   centerer.className = 'loader-centerer';
   centerer.id = 'p5-loader';
-
-  // 2. Inject the spinning triangle and the pulsing dots
-  // Note: We use spans for dots to trigger the sequence animation
   centerer.innerHTML = `
-    <div class="triangle-loader">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <div class="loading-text">
-      Loading avatar<span class="dot-anim">.</span><span class="dot-anim">.</span><span class="dot-anim">.</span>
-    </div>
+    <div class="triangle-loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="loading-text">Loading avatar<span class="dot-anim">.</span><span class="dot-anim">.</span><span class="dot-anim">.</span></div>
   `;
-  
-
-
-
   container.appendChild(centerer);
 
-  // 3. Canvas Setup
-  const w = container ? container.clientWidth : windowWidth;
-  const h = container ? container.clientHeight : windowHeight;
+  // Measure container width/height correctly
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  
   let c = createCanvas(w, h, WEBGL);
-  if (container) c.parent("javaani");
+  c.parent("javaani");
 
-  // 4. Asset Loading
+  pixelDensity(1); 
+
   riccardo = loadModel('Riccardo.obj', true, () => {
     miaTexture = loadImage('Riccardo.jpg', () => {
-      // Once loaded, remove the loader
       const loaderElem = document.getElementById('p5-loader');
       if (loaderElem) loaderElem.remove();
       modelReady = true;
@@ -55,16 +38,12 @@ function setup() {
 
 
 
-
 function windowResized() {
   const container = document.getElementById("javaani");
   if (container) {
-    // Get the new width and height of the container
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    
-    // Resize the p5 canvas to match
-    resizeCanvas(w, h);
+    resizeCanvas(container.clientWidth, container.clientHeight);
+    let aspect = width / height;
+    perspective(PI / 3, aspect, 0.1, 10000);
   }
 }
 
@@ -74,9 +53,8 @@ function windowResized() {
 
 
 
-
 function draw() {
-  background(0);
+  clear ();
 
   if (modelReady) {
     renderScene();
@@ -88,44 +66,31 @@ function draw() {
 
 
 
-
 function renderScene() {
-  // 1. STATIC LIGHTING (Remains fixed while model spins)
-  ambientLight(50); // Lowered slightly to make the green pop
-  
-  // Frontal white light for visibility
-  directionalLight(150, 150, 150, 0, 0, -1);
 
-  // --- GREEN SPOTLIGHT: BEHIND AND HIGHER ---
-  // Position: x=0 (centered), y=-600 (very high), z=-500 (deep behind model)
-  // Direction: x=0, y=1 (pointing down), z=0.8 (pointing forward towards model)
-  let spotX = 0;
-  let spotY = -600; 
-  let spotZ = -500;
-  
-  spotLight(
-    0, 255, 0,               // Color: Pure Green
-    spotX, spotY, spotZ,     // Position
-    0, 1, 0.8,               // Direction (Down and Forward)
-    PI / 3,                  // Angle of the cone (60 degrees)
-    25                      // Concentration (Higher = sharper focus)
-  );
 
-  // 2. MODEL TRANSFORMATIONS
-  push(); 
-    rotateX(PI); 
-    rotateY(frameCount * 0.01); 
-    scale(2.5);
+  // 1. Basic visibility
+  ambientLight(60); 
+  directionalLight(200, 200, 200, 0, 0, -1);
+
+  // 2. THE GREEN GLOW (Rim Light)
+  // Positioned at Z: -500 (Behind the model)
+  // We add two to create a wide wash of light
+  pointLight(0, 255, 0, -200, 0, -500); 
+  pointLight(0, 255, 0, 200, 0, -500);
+
+  push();
+    rotateX(PI);
+    rotateY(frameCount * 0.01);
+    
+    let modelScale = (height * 0.35) / 100; 
+    scale(modelScale); 
+    
     noStroke();
-    
-    if (miaTexture) {
-      texture(miaTexture);
-    }
-    
+    if (miaTexture) texture(miaTexture);
     model(riccardo);
-  pop(); 
+  pop();
 }
-
 
 
 

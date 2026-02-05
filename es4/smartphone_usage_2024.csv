@@ -1,0 +1,56 @@
+Rank,Country,Continent,Time_Spent_Q3_2024,Time_Spent_Q3_2023,Change
+1,Ghana,Africa,5 hours and 43 minutes,4 hours and 58 minutes,↑ 45 minutes
+2,Philippines,Asia,5 hours and 21 minutes,5 hours and 20 minutes,↑ 1 minute
+3,Brazil,South America,5 hours and 12 minutes,5 hours and 19 minutes,↓ 7 minutes
+4,South Africa,Africa,5 hours and 11 minutes,5 hours and 15 minutes,↓ 4 minutes
+5,Thailand,Asia,5 hours,5 hours and 2 minutes,↓ 2 minutes
+6,Chile,South America,4 hours and 58 minutes,4 hours and 48 minutes,↑ 10 minutes
+7,Kenya,Africa,4 hours and 57 minutes,4 hours and 36 minutes,↑ 21 minutes
+8,Colombia,South America,4 hours and 47 minutes,4 hours and 47 minutes,–
+9,Malaysia,Asia,4 hours and 42 minutes,4 hours and 37 minutes,↑ 5 minutes
+10,Argentina,South America,4 hours and 40 minutes,4 hours and 37 minutes,↑ 3 minutes
+11,Indonesia,Asia,4 hours and 38 minutes,4 hours and 45 minutes,↓ 7 minutes
+12,UAE,Asia,4 hours and 27 minutes,4 hours and 34 minutes,↓ 7 minutes
+13,Mexico,North America,4 hours and 20 minutes,4 hours and 23 minutes,↓ 3 minutes
+14,Saudi Arabia,Asia,4 hours and 17 minutes,4 hours and 23 minutes,↓ 6 minutes
+=15,Egypt,Africa,4 hours and 9 minutes,4 hours and 25 minutes,↓ 16 minutes
+=15,Taiwan,Asia,4 hours and 9 minutes,4 hours and 5 minutes,↑ 4 minutes
+17,Russia,Europe/Asia,4 hours and 7 minutes,3 hours and 56 minutes,↑ 11 minutes
+18,Turkey,Europe/Asia,4 hours and 4 minutes,4 hours and 7 minutes,↓ 3 minutes
+19,India,Asia,3 hours and 57 minutes,4 hours and 3 minutes,↓ 6 minutes
+20,Israel,Asia,3 hours and 53 minutes,3 hours and 52 minutes,↑ 1 minute
+21,Nigeria,Africa,3 hours and 49 minutes,4 hours and 20 minutes,↑ 29 minutes
+-,Global Average,-,3 hours and 46 minutes,3 hours and 50 minutes,-
+22,Bulgaria,Europe,3 hours and 44 minutes,3 hours and 49 minutes,↓ 5 minutes
+=23,Serbia,Europe,3 hours and 40 minutes,–,–
+=23,Romania,Europe,3 hours and 40 minutes,3 hours and 51 minutes,↓ 11 minutes
+25,Portugal,Europe,3 hours and 38 minutes,3 hours and 33 minutes,↑ 5 minutes
+26,China,Asia,3 hours and 32 minutes,3 hours and 31 minutes,↑ 1 minute
+27,Morocco,Africa,3 hours and 25 minutes,2 hours and 21 minutes,↑ 4 minutes
+28,US,North America,3 hours and 22 minutes,3 hours and 39 minutes,↓ 17 minutes
+29,Croatia,Europe,3 hours and 21 minutes,3 hours and 17 minutes,↑ 4 minutes
+30,Vietnam,Asia,3 hours and 20 minutes,3 hours and 30 minutes,↓ 10 minutes
+31,Poland,Europe,3 hours and 18 minutes,3 hours and 5 minutes,↑ 13 minutes
+=32,New Zealand,Oceania,3 hours and 17 minutes,3 hours and 13 minutes,↑ 4 minutes
+=32,Singapore,Asia,3 hours and 17 minutes,3 hours and 26 minutes,↓ 9 minutes
+34,Sweden,Europe,3 hours and 13 minutes,3 hours and 10 minutes,↑ 3 minutes
+35,Ireland,Europe,3 hours and 11 minutes,3 hours and 15 minutes,↓ 4 minutes
+36,Norway,Europe,3 hours and 2 minutes,2 hours and 58 minutes,↑ 4 minutes
+37,Hungary,Europe,3 hours,3 hours and 14 minutes,↓ 14 minutes
+38,Australia,Oceania,2 hours and 58 minutes,2 hours and 56 minutes,↓ 2 minutes
+39,Netherlands,Europe,2 hours and 55 minutes,2 hours and 46 minutes,↑ 9 minutes
+40,Czechia,Europe,2 hours and 55 minutes,2 hours and 56 minutes,↓ 1 minute
+=41,Hong Kong,Asia,2 hours and 54 minutes,3 hours and 17 minutes,↓ 23 minutes
+=41,Italy,Europe,2 hours and 54 minutes,2 hours and 57 minutes,↓ 3 minutes
+=41,Spain,Europe,2 hours and 54 minutes,2 hours and 53 minutes,↑ 1 minute
+44,Canada,North America,2 hours and 46 minutes,2 hours and 59 minutes,↓ 13 minutes
+45,Switzerland,Europe,2 hours and 44 minutes,2 hours and 38 minutes,↑ 6 minutes
+=46,Greece,Europe,2 hours and 43 minutes,2 hours and 54 minutes,↓ 11 minutes
+=46,South Korea,Asia,2 hours and 43 minutes,2 hours and 43 minutes,–
+48,Germany,Europe,2 hours and 42 minutes,2 hours and 36 minutes,↑ 6 minutes
+=49,UK,Europe,2 hours and 39 minutes,2 hours and 57 minutes,↓ 18 minutes
+=49,Austria,Europe,2 hours and 39 minutes,2 hours and 41 minutes,↓ 2 minutes
+50,France,Europe,2 hours and 34 minutes,2 hours and 34 minutes,–
+51,Belgium,Europe,2 hours and 32 minutes,2 hours and 26 minutes,↑ 6 minutes
+52,Denmark,Europe,2 hours and 27 minutes,2 hours and 24 minutes,↑ 3 minutes
+53,Japan,Asia,1 hour and 47 minutes,1 hour and 54 minutes,↓ 7 minutes

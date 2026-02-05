@@ -5,29 +5,42 @@ let scrollX = 0;
 
 function setup() {
   container = document.getElementById("javaani");
-  // Use container dimensions or window dimensions as fallback
-  let w = container ? container.clientWidth : windowWidth;
-  let h = container ? container.clientHeight : 100;
 
-  const c = createCanvas(w, h);
+  // We create a canvas, but we'll resize it immediately to be safe
+  const c = createCanvas(10, 10); 
   c.parent("javaani");
 
-  inizializzaTesto();
+  // Call a custom resize function to snap it to the container
+  handleInitialResize();
 }
 
-// This function triggers automatically whenever the browser window is resized
+function handleInitialResize() {
+  if (container) {
+    // OffsetWidth/Height are the most reliable for Flexbox containers
+    let w = container.offsetWidth;
+    let h = container.offsetHeight;
+    
+    resizeCanvas(w, h);
+    inizializzaTesto();
+  }
+}
+
+// Ensure it snaps again once the entire window (CSS, Fonts, etc.) is loaded
+window.addEventListener('load', () => {
+  handleInitialResize();
+});
+
 function windowResized() {
-  let w = container ? container.clientWidth : windowWidth;
-  let h = container ? container.clientHeight : 100;
+  // When window resizes, the flexbox height changes. Re-measure here.
+  let w = container.offsetWidth;
+  let h = container.offsetHeight;
   
   resizeCanvas(w, h);
-  // Re-calculate the text points so they scale with the new size
   inizializzaTesto();
 }
 
 function inizializzaTesto() {
   points = [];
-  // Use 'width' and 'height' variables which are automatically updated by p5
   let pg = createGraphics(width, height);
   pg.pixelDensity(1);
   pg.background(0);
@@ -37,19 +50,26 @@ function inizializzaTesto() {
   pg.push();
   pg.translate(width / 2, height / 1.7);
   
-  // Make font size responsive based on the current width
-  let fontBaseSize = width / 7;
+  // 1. HORIZONTAL SIZE: Adjust the width/7 to width/6.5 if you want it wider
+  let fontBaseSize = width / 7; 
   pg.textSize(fontBaseSize);
   
-  // Ensure the text doesn't get too small or too large
-  let stretchY = height / (fontBaseSize * 0.8);
+  // 2. VERTICAL MARGIN: Change this value (in pixels) to increase/decrease the gap
+  let verticalMargin = 50; 
+  let availableHeight = height - (verticalMargin * 2);
+
+  // 3. STRETCH CALCULATION:
+  // This forces the text height to equal the available height
+  // The 0.7 offset accounts for the natural whitespace in font glyphs
+  let stretchY = availableHeight / (fontBaseSize * 0.7);
+  
   pg.scale(1.0, stretchY);
   
   pg.text("SMIRKSTUDIO", 0, 0);
   pg.pop();
 
   pg.loadPixels();
-
+  
   for (let x = 0; x < width; x += cellSize) {
     for (let y = 0; y < height; y += cellSize) {
       let index = (x + y * width) * 4;

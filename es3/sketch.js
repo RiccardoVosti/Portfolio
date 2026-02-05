@@ -29,6 +29,7 @@ function preload() {
 
 
 function setup() {
+    frameRate(60);
     initSketch();
 }
 
@@ -51,8 +52,6 @@ function initSketch() {
     const c = createCanvas(w, h, WEBGL);
     if (container) c.parent("javaani");
 
-    // --- MODIFIED ENGINE BOUNDARIES ---
-    // Increased iterations make the collision detection much "firmer"
     engine = Engine.create({
         positionIterations: 10,
         velocityIterations: 10
@@ -60,18 +59,22 @@ function initSketch() {
     world = engine.world;
     world.gravity.y = 0;
 
-    // ... (rest of your initSketch code remains exactly the same) ...
     let marginX = 0;
     let marginTop = 10;
+
+    // 1. Define Button Position
+    let buttonY = marginTop + 120;
+    let buttonHeight = 40; // Approximate height of your styled button
+
     textFont(font);
     let baseSize = 100;
     textSize(baseSize);
     let maxLineWidth = max(textWidth("Good design"), textWidth("needs structure"));
-    dynamicTextSize = baseSize * ((w * 0.99) / maxLineWidth);
+    dynamicTextSize = baseSize * ((w * 0.97) / maxLineWidth);
     textSize(dynamicTextSize);
 
     if (!fallButton) {
-        fallButton = createButton('Break structure');
+        fallButton = createButton('BOOM!');
         fallButton.mousePressed(makeItFall);
         styleButton(fallButton);
     }
@@ -83,9 +86,11 @@ function initSketch() {
 
     resetButton.hide();
     fallButton.show();
-    fallButton.position(marginX + 10, marginTop + 120);
-    resetButton.position(marginX + 10, marginTop + 120);
 
+    fallButton.position(marginX + 10, buttonY);
+    resetButton.position(marginX + 10, buttonY);
+
+    // Physics Setup
     const mouse = Mouse.create(c.elt);
     mouse.pixelRatio = pixelDensity();
     mConstraint = MouseConstraint.create(engine, {
@@ -100,12 +105,17 @@ function initSketch() {
     });
     World.add(world, mConstraint);
 
-    let startX = -w / 2 + marginX;
-    let textStartY = -h / 2 + 15 + 40 + (dynamicTextSize * 0.5);
+    // 2. NEW CALCULATION FOR TEXT POSITION
+    // Convert screen Y to WEBGL Y (subtract h/2) and add the 50px offset
+    let startX = -w / 2 + marginX + 10;
+    let relativeGap = dynamicTextSize/2.7;
+    let textStartY = (buttonY + buttonHeight + relativeGap) - (h / 2);
 
+    // Create Phrases
     createStaticPhrase("Good design", textStartY, startX);
     createStaticPhrase("needs structure", textStartY + (dynamicTextSize * 0.9), startX);
 
+    // Boundaries
     let thickness = 400;
     let floor = Bodies.rectangle(0, h / 2 + thickness / 2, w * 5, thickness, {
         isStatic: true
@@ -124,9 +134,8 @@ function initSketch() {
 
 
 
-
 function draw() {
-    background(0,255,0);
+    background(0, 255, 0);
 
     // Adjust mouse for WEBGL center origin
     let mX = mouseX - width / 2;
@@ -203,18 +212,18 @@ class Letter {
     }
 
     show() {
-    let pos = this.body.position;
-    let angle = this.body.angle;
-    push();
-    translate(pos.x, pos.y);
-    rotateZ(angle);
-    fill(0); 
-    noStroke();
-    textAlign(CENTER, CENTER);
-    textSize(dynamicTextSize);
-    text(this.char, 0, 0); 
-    pop();
-  }
+        let pos = this.body.position;
+        let angle = this.body.angle;
+        push();
+        translate(pos.x, pos.y);
+        rotateZ(angle);
+        fill(0);
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(dynamicTextSize);
+        text(this.char, 0, 0);
+        pop();
+    }
 }
 
 
@@ -240,16 +249,32 @@ function makeItFall() {
 
 
 function styleButton(btn) {
-    btn.style('background-color', '#000000');
-    btn.style('color', '#00ff00');
+    // Initial State (Normal)
+    btn.style('background-color', 'transparent'); // Transparent background
+    btn.style('color', '#000000'); // Black text
+    btn.style('border', '2px solid #000000'); // Black stroke (outline)
+
+    // Shared Styles
     btn.style('font-family', 'Neue-Montreal, sans-serif');
     btn.style('font-size', '24px');
-    btn.style('padding', '5px 12px');
-    btn.style('border', 'none');
+    btn.style('padding', '5px 15px');
     btn.style('border-radius', '50px');
     btn.style('cursor', 'pointer');
-}
+    // Smooth transition
 
+    // Hover State
+    btn.mouseOver(() => {
+        btn.style('background-color', '#000000'); // Black background
+        btn.style('color', '#00ff00'); // Green text
+    });
+
+    // Return to Normal State
+    btn.mouseOut(() => {
+        btn.style('background-color', 'transparent');
+        btn.style('color', '#000000');
+        btn.style('border', '2px solid #000000');
+    });
+}
 
 
 
@@ -264,33 +289,28 @@ function windowResized() {
 
 // --- LOGICA TESTO NAVIGAZIONE (Hacker Effect sui link) ---
 document.addEventListener("DOMContentLoaded", () => {
-  const links = document.querySelectorAll("a,.logotesto");
-  const GLYPHS = "X#%&@$01+-*/<>[]{}☺";
+    const links = document.querySelectorAll("a,.logotesto");
+    const GLYPHS = "X#%&@$01+-*/<>[]{}☺";
 
-  links.forEach((link) => {
-    const originalText = link.innerText;
-    let interval = null;
-    link.addEventListener("mouseenter", () => {
-      let iteration = 0;
-      clearInterval(interval);
-      interval = setInterval(() => {
-        link.innerText = originalText.split("").map((l, i) => {
-          if (i < iteration) return originalText[i];
-          if (l === " ") return " ";
-          return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-        }).join("");
-        if (iteration >= originalText.length) clearInterval(interval);
-        iteration += 1;
-      }, 40);
+    links.forEach((link) => {
+        const originalText = link.innerText;
+        let interval = null;
+        link.addEventListener("mouseenter", () => {
+            let iteration = 0;
+            clearInterval(interval);
+            interval = setInterval(() => {
+                link.innerText = originalText.split("").map((l, i) => {
+                    if (i < iteration) return originalText[i];
+                    if (l === " ") return " ";
+                    return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+                }).join("");
+                if (iteration >= originalText.length) clearInterval(interval);
+                iteration += 1;
+            }, 40);
+        });
+        link.addEventListener("mouseleave", () => {
+            clearInterval(interval);
+            link.innerText = originalText;
+        });
     });
-    link.addEventListener("mouseleave", () => {
-      clearInterval(interval);
-      link.innerText = originalText;
-    });
-  });
 });
-
-
-
-
-
