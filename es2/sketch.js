@@ -6,24 +6,23 @@ function setup() {
   frameRate(60);
   const container = document.getElementById("javaani");
   
-  // Create Loader (same as your previous logic)
+  // (Loader logic remains the same here...)
   const centerer = document.createElement('div');
   centerer.className = 'loader-centerer';
   centerer.id = 'p5-loader';
-  centerer.innerHTML = `
-    <div class="triangle-loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="loading-text">Loading avatar<span class="dot-anim">.</span><span class="dot-anim">.</span><span class="dot-anim">.</span></div>
-  `;
+  centerer.innerHTML = `<div class="triangle-loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                        <div class="loading-text">Loading avatar...</div>`;
   container.appendChild(centerer);
 
-  // Measure container width/height correctly
-  const w = container.clientWidth;
-  const h = container.clientHeight;
-  
-  let c = createCanvas(w, h, WEBGL);
+  // Initialize Canvas
+  let c = createCanvas(container.offsetWidth, container.offsetHeight, WEBGL);
   c.parent("javaani");
-
+  c.style('display', 'block'); 
   pixelDensity(1); 
+
+  // --- THE SYNC FIX ---
+  // Manually trigger the resize logic once to set the correct perspective and aspect ratio immediately
+  windowResized();
 
   riccardo = loadModel('Riccardo.obj', true, () => {
     miaTexture = loadImage('Riccardo.jpg', () => {
@@ -41,7 +40,10 @@ function setup() {
 function windowResized() {
   const container = document.getElementById("javaani");
   if (container) {
-    resizeCanvas(container.clientWidth, container.clientHeight);
+    // Re-measure and resize
+    resizeCanvas(container.offsetWidth, container.offsetHeight);
+    
+    // Fix perspective to prevent stretching/clipping on resize
     let aspect = width / height;
     perspective(PI / 3, aspect, 0.1, 10000);
   }
@@ -65,25 +67,27 @@ function draw() {
 
 
 
-
 function renderScene() {
+  ambientLight(80);
 
+  // --- SPINNING LIGHT MATH ---
+  // Calculates horizontal orbit (X and Z)
+  let lightSpeed = frameCount * -0.05; // Negative = opposite of model
+  let radius = 500;
+  let lx = cos(lightSpeed) * radius;
+  let lz = sin(lightSpeed) * radius;
 
-  // 1. Basic visibility
-  ambientLight(60); 
-  directionalLight(200, 200, 200, 0, 0, -1);
+  // Orbiting Green Lights
+  pointLight(0, 255, 0, lx, 0, lz);
+  pointLight(0, 255, 0, -lx, 0, -lz);
 
-  // 2. THE GREEN GLOW (Rim Light)
-  // Positioned at Z: -500 (Behind the model)
-  // We add two to create a wide wash of light
-  pointLight(0, 255, 0, -200, 0, -500); 
-  pointLight(0, 255, 0, 200, 0, -500);
-
+  // 3. DRAW THE MODEL
   push();
     rotateX(PI);
-    rotateY(frameCount * 0.01);
+    rotateY(frameCount * 0.01); // Model spins the other way
     
-    let modelScale = (height * 0.35) / 100; 
+    // Adjusted scale logic to fit the container better
+    let modelScale = (height * 0.4) / 100; 
     scale(modelScale); 
     
     noStroke();
@@ -91,7 +95,6 @@ function renderScene() {
     model(riccardo);
   pop();
 }
-
 
 
 
