@@ -13,7 +13,7 @@ html,body {
     left: 0;
     width: 100%;
     height: calc(100% - 5px); /* Fills the screen minus your 5px bottom margin */
-    background-color: black;
+    
     overflow: hidden;
     display: block; 
     line-height: 0;
