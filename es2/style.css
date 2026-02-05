@@ -312,6 +312,13 @@ nav {
 
 }
 
+#javaani {
+  width: 100%;
+  height: 100svh; /* 'svh' accounts for the mobile search/URL bars */
+  overflow: hidden;
+  position: relative;
+}
+
 
 .logoimg {
     background-image: url(Smirkstudiologo.png);
