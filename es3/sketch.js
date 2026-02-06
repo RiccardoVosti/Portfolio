@@ -78,7 +78,7 @@ function applyButtonStyle(btn) {
   btn.style('padding', '8px 20px');
   btn.style('background', 'transparent');
   btn.style('color', '#000');
-  btn.style('border', '2px solid #000');
+  btn.style('border', '3px solid #000');
   btn.style('border-radius', '50px');
   btn.style('cursor', 'pointer');
   btn.style('z-index', '999');
