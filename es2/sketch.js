@@ -70,23 +70,23 @@ function draw() {
 function renderScene() {
   // 1. INCREASE GLOBAL BRIGHTNESS
   // Increased ambient light slightly so the "dark" sides aren't pitch black
-  ambientLight(120);
+  ambientLight(80);
 
   // 2. STRENGTHEN THE WHITE LIGHT (The "Powerful" Light)
   // Directional light acts like the sun; it's much stronger for highlighting form
   directionalLight(255, 255, 255, 0, 1, -1); 
 
   // --- SPINNING LIGHT MATH ---
-  let lightSpeed = frameCount * -0.01; 
-  let radius = 700; // Increased radius so they don't "flood" the model as much
+  let lightSpeed = frameCount * -0.020; 
+  let radius = 1300; // Increased radius so they don't "flood" the model as much
   
   let lx = cos(lightSpeed) * radius;
   let lz = sin(lightSpeed) * radius;
 
   // 3. ADJUST GREEN LIGHTS
   // Lowered the G value (150 instead of 255) so it's a accent, not a flood
-  pointLight(0, 150, 0, lx, 0, lz);
-  pointLight(0, 150, 0, -lx, 0, -lz);
+  pointLight(0, 250, 0, lx, 0, lz);
+  pointLight(0, 100, 0, -lx, 0, -lz);
 
   // 4. DRAW THE MODEL
   push();
