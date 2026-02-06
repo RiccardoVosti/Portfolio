@@ -31,11 +31,13 @@ window.addEventListener('load', () => {
 });
 
 function windowResized() {
-  // When window resizes, the flexbox height changes. Re-measure here.
+  // Re-measure the container accurately
   let w = container.offsetWidth;
   let h = container.offsetHeight;
   
   resizeCanvas(w, h);
+  
+  // Re-calculate the points based on the new dimensions
   inizializzaTesto();
 }
 

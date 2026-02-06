@@ -148,8 +148,10 @@ hr {
 
 
 /*RESPONSIVE */
+/*RESPONSIVE */
 @media screen and (max-width: 768px) {
-   
+
+
     .navigazione {
         width: 100px;
         display: flex;
@@ -159,51 +161,52 @@ hr {
 
 
     .logotesto {
+        margin: 0;
+        margin-left: 10px;
+        width: 140px;
+        font-family: Neue-Montreal;
+        font-size: 14px;
+       
+        line-height: 16px;
+        text-decoration: none;
+        color: black;
+        font-weight: normal;
+
+    }
+
+    #javaani {
+        width: 100%;
+        height: 100svh;
+        /* 'svh' accounts for the mobile search/URL bars */
+        overflow: hidden;
+        position: relative;
+    }
+
+
+    .logoimg {
+        background-image: url(Smirkstudiologo.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        width: 50px;
+        height: 50px;
+
+    }
+
+
+
+  a {
     margin: 0;
-    margin-left: 10px;
-    width: 140px;
     font-family: Neue-Montreal;
-    font-size: 14px;
-    text-decoration: none;
-    color: black;
-    font-weight: normal;
-
-}
-
-
-.logoimg {
-    background-image: url(Smirkstudiologo.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    width: 50px;
-    height:60px;
-
-}
-
-
-
-a {
-   
-    margin: 0;
-    font-family: Neue-Montreal;
-    font-size: 14px;
+    font-size: 14px;      /* Reduced from 14px */
     text-decoration: none;
     color: black;
     font-weight: 400;
-
-    /* --- FIX PER IL JITTER --- */
     display: inline-block;
-    /* Permette di gestire altezza e larghezza */
     line-height: 1;
-    /* Forza l'altezza della riga a essere uguale al font-size */
-    height: 22px;
-    /* Imposta un'altezza fissa (leggermente superiore al font-size) */
+    height: 16px;         /* Reduced from 22px - this controls the "box" height */
     vertical-align: middle;
-    /* Allinea il contenuto al centro */
     overflow: hidden;
-    /* Impedisce a simboli giganti di uscire dal bordo */
-
 }
 
 

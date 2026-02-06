@@ -68,25 +68,31 @@ function draw() {
 
 
 function renderScene() {
-  ambientLight(80);
+  // 1. INCREASE GLOBAL BRIGHTNESS
+  // Increased ambient light slightly so the "dark" sides aren't pitch black
+  ambientLight(120);
+
+  // 2. STRENGTHEN THE WHITE LIGHT (The "Powerful" Light)
+  // Directional light acts like the sun; it's much stronger for highlighting form
+  directionalLight(255, 255, 255, 0, 1, -1); 
 
   // --- SPINNING LIGHT MATH ---
-  // Calculates horizontal orbit (X and Z)
-  let lightSpeed = frameCount * -0.05; // Negative = opposite of model
-  let radius = 500;
+  let lightSpeed = frameCount * -0.01; 
+  let radius = 700; // Increased radius so they don't "flood" the model as much
+  
   let lx = cos(lightSpeed) * radius;
   let lz = sin(lightSpeed) * radius;
 
-  // Orbiting Green Lights
-  pointLight(0, 255, 0, lx, 0, lz);
-  pointLight(0, 255, 0, -lx, 0, -lz);
+  // 3. ADJUST GREEN LIGHTS
+  // Lowered the G value (150 instead of 255) so it's a accent, not a flood
+  pointLight(0, 150, 0, lx, 0, lz);
+  pointLight(0, 150, 0, -lx, 0, -lz);
 
-  // 3. DRAW THE MODEL
+  // 4. DRAW THE MODEL
   push();
     rotateX(PI);
-    rotateY(frameCount * 0.01); // Model spins the other way
+    rotateY(frameCount * 0.01); 
     
-    // Adjusted scale logic to fit the container better
     let modelScale = (height * 0.4) / 100; 
     scale(modelScale); 
     
@@ -97,24 +103,6 @@ function renderScene() {
 }
 
 
-
-
-
-function renderScene() {
-  ambientLight(100);
-  directionalLight(255, 255, 255, 0, 0, -1);
-  pointLight(0, 255, 0, -500, -500, -500);
-  pointLight(0, 255, 0, 500, 500, -500);
-
-  push();
-  rotateX(PI);
-  rotateY(frameCount * 0.01);
-  scale(2.5);
-  noStroke();
-  texture(miaTexture);
-  model(riccardo);
-  pop();
-}
 
 
 
