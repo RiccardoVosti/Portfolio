@@ -78,7 +78,7 @@ function applyButtonStyle(btn) {
   btn.style('padding', '8px 20px');
   btn.style('background', 'transparent');
   btn.style('color', '#000');
-  btn.style('border', '3px solid #000');
+  btn.style('border', '2px solid #000');
   btn.style('border-radius', '50px');
   btn.style('cursor', 'pointer');
   btn.style('z-index', '999');
@@ -116,7 +116,7 @@ function createBoundaries() {
   let t = 500; 
   
   // 1. Calculate a proportional gap
-  let proportionalGap = width * 0.03; 
+  let proportionalGap = width *0.09; 
   
   // 2. CLAMP the gap: Minimum 10px, Maximum 40px
   // This prevents it from disappearing on mobile or being huge on desktop
